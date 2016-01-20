@@ -27,12 +27,6 @@ FactoryGirl.define  do
     initialize_with { new(name, code, scope, languages, metric_collector_name) }
   end
 
-  trait :metric_fu do
-    languages [:RUBY]
-    metric_collector_name "MetricFu"
-    scope 'METHOD'
-  end
-
   factory :analizo_metric, parent: :native_metric do
     languages [:C, :CPP, :JAVA]
     metric_collector_name "Analizo"
@@ -41,17 +35,15 @@ FactoryGirl.define  do
     code 'acc'
   end
 
-  factory :flog_metric, parent: :native_metric do
-    metric_fu
-
-    name "Pain"
-    code :flog
+  factory :acc_metric, parent: :analizo_metric do
+    name "Afferent Connections per Class (used to calculate COF - Coupling Factor)"
+    code "acc"
+    scope :CLASS
   end
 
-  factory :saikuro_metric,  parent: :native_metric do
-    metric_fu
-
-    name "Cyclomatic Complexity"
-    code :saikuro
+  factory :total_abstract_classes_metric, parent: :analizo_metric do
+    name "Total Abstract Classes"
+    code "total_abstract_classes"
+    scope :SOFTWARE
   end
 end
