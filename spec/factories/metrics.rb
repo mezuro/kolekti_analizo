@@ -33,6 +33,7 @@ FactoryGirl.define  do
     scope 'CLASS'
     name 'Afferent Connections per Class (used to calculate COF - Coupling Factor)'
     code 'acc'
+    description ''
   end
 
   factory :acc_metric, parent: :analizo_metric do

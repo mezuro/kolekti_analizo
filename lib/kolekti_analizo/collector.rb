@@ -1,7 +1,8 @@
 require 'kalibro_client'
 require 'kolekti/collector'
 require 'kolekti/errors'
-require 'kolekti/analizo/parser'
+
+require_relative 'parser'
 
 module Kolekti
   module Analizo
@@ -16,13 +17,14 @@ module Kolekti
 
       def collect_metrics(code_directory, wanted_metric_configurations, persistence_strategy)
         parser = Analizo::Parser.new(wanted_metric_configurations, persistence_strategy)
-        parser.parse_all(run code_directory)
+        result = run code_directory
+        parser.parse_all(result)
       end
 
       def default_value_from(metric_configuration)
         metric = !metric_configuration.nil? ? metric_configuration.metric : nil
         if metric.nil? || metric.type != 'NativeMetricSnapshot' || metric.metric_collector_name != self.name
-          raise ArgumentError.new("Metric configuration does not belong to analizo")
+          raise ArgumentError.new("Metric configuration does not belong to Analizo")
         end
 
         0.0
