@@ -1,12 +1,29 @@
 require 'kolekti/persistence_strategy'
 
 class TestPersistenceStrategy < Kolekti::PersistenceStrategy
+  attr_reader :tree_metric_results, :hotspot_metric_results
+
+  def initialize
+    @tree_metric_results = []
+    @hotspot_metric_results = []
+  end
+
   def create_tree_metric_result(metric_configuration, module_name, value, granularity)
-    puts "Create tree metric result: #{module_name} #{metric_configuration} #{value} #{granularity}"
+    @tree_metric_results << {
+      metric_configuration: metric_configuration,
+      module_name: module_name,
+      value: value,
+      granularity: granularity
+    }
   end
 
   def create_hotspot_metric_result(metric_configuration, module_name, line, message)
-    puts "Create hotspot metric result: #{module_name} #{metric_configuration} #{line} #{message}"
+    @hotspot_metric_results << {
+      metric_configuration: metric_configuration,
+      module_name: module_name,
+      line: line,
+      message: message
+    }
   end
 
   def create_related_hotspot_metric_results(metric_configuration, results)
