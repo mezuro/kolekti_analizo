@@ -2,7 +2,7 @@ require 'kalibro_client'
 require 'kolekti/collector'
 require 'kolekti/errors'
 
-require_relative 'parser'
+require 'kolekti_analizo/parser'
 
 module Kolekti
   module Analizo
