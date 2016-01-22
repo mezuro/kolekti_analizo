@@ -9,6 +9,7 @@ end
 
 # The gem itself
 require 'kolekti_analizo'
+require 'kolekti'
 
 require 'factory_girl'
 FactoryGirl.find_definitions
