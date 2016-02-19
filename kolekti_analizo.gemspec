@@ -6,8 +6,14 @@ require 'kolekti_analizo/version'
 Gem::Specification.new do |spec|
   spec.name          = "kolekti_analizo"
   spec.version       = KolektiAnalizo::VERSION
-  spec.authors       = ["Diego Araújo", "Daniel Miranda"]
-  spec.email         = ["diegoamc90@gmail.com", "danielkza2@gmail.com"]
+  spec.authors       = ["Daniel Miranda",
+                        "Diego Araújo",
+                        "Eduardo Araújo",
+                        "Rafael Reggiani Manzo"]
+  spec.email         = ["danielkza2@gmail.com",
+                        "diegoamc90@gmail.com",
+                        "duduktamg@hotmail.com",
+                        "rr.manzo@protonmail.com"]
 
   spec.summary       = 'Metric collecting support for C, C++ and JAVA that servers Kolekti.'
   spec.homepage      = 'https://github.com/mezuro/kolekti_analizo'
