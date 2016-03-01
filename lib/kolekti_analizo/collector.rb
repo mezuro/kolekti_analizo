@@ -11,7 +11,7 @@ module Kolekti
         super('Analizo', 'description', load_analizo_supported_metrics)
       end
 
-      def available?
+      def self.available?
         system('analizo --version', [:out, :err] => '/dev/null') ? true : false
       end
 

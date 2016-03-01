@@ -40,27 +40,29 @@ describe Kolekti::Analizo::Collector do
   end
 
   context 'with a simulated metrics list' do
-    before :each do
-      described_class.any_instance.expects(:load_analizo_supported_metrics).returns({})
-    end
-
     describe 'available?' do
       context 'when the collector is available' do
         it 'is expected to return true' do
-          subject.expects(:system).with(regexp_matches(/^analizo\b/), anything).returns(true)
-          expect(subject.available?).to eq true
+          described_class.expects(:system).with(regexp_matches(/^analizo\b/), anything).returns(true)
+          expect(described_class.available?).to eq true
         end
       end
 
       context 'when the collector is not available' do
         it 'is expected to return false' do
-          subject.expects(:system).with(regexp_matches(/^analizo\b/), anything).returns(nil)
-          expect(subject.available?).to eq false
+          described_class.expects(:system).with(regexp_matches(/^analizo\b/), anything).returns(nil)
+          expect(described_class.available?).to eq false
         end
       end
     end
 
     describe 'default_value_from' do
+      let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
+      before :each do
+        described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
+        $?.expects(:success?).returns(true)
+      end
+
       context 'with a valid metric configuration' do
         let(:metric) { FactoryGirl.build(:analizo_metric) }
         let(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: metric) }
@@ -89,9 +91,11 @@ describe Kolekti::Analizo::Collector do
       end
 
       context 'when running succeeded' do
+        let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
         before :each do
+          described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
           Kolekti::Analizo::Parser.any_instance.expects(:parse_all).with(analizo_metric_collector_list)
-          $?.expects(:success?).returns(true)
+          $?.expects(:success?).twice.returns(true)
         end
 
         it 'is expected to run succesfully' do
@@ -100,8 +104,10 @@ describe Kolekti::Analizo::Collector do
       end
 
       context 'when running failed' do
+        let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
         before :each do
-          $?.expects(:success?).returns(false)
+          described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
+          $?.stubs(:success?).returns(true, false)
           $?.expects(:exitstatus).returns(1)
         end
 
