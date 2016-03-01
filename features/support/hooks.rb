@@ -6,5 +6,5 @@ After('@clear_repository_dir') do
 end
 
 After('@unregister_collectors') do
-  Kolekti.collectors.each { |collector| Kolekti.unregister_collector(collector) }
+  Kolekti.collectors.each { |collector| Kolekti.deregister_collector(collector.class) }
 end

@@ -1,7 +1,7 @@
 require 'tmpdir'
 
 Given(/^Analizo is registered on Kolekti$/) do
-  Kolekti.register_collector(Kolekti::Analizo::Collector.new)
+  Kolekti.register_collector(Kolekti::Analizo::Collector)
 end
 
 Given(/^a persistence strategy is defined$/) do
