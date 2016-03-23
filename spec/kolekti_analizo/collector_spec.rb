@@ -24,7 +24,7 @@ describe Kolekti::Analizo::Collector do
         let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
         let(:acc_metric) { FactoryGirl.build(:acc_metric) }
         let(:tac_metric) { FactoryGirl.build(:total_abstract_classes_metric) }
-        let(:supported_metrics) { { acc_metric.code => acc_metric, tac_metric.code => tac_metric } }
+        let(:supported_metrics) { { acc_metric.code.to_sym => acc_metric, tac_metric.code.to_sym => tac_metric } }
 
         before :each do
           described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
