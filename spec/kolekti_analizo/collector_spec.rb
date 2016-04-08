@@ -31,7 +31,7 @@ describe Kolekti::Analizo::Collector do
           $?.expects(:success?).returns(true)
         end
 
-        it 'is expected to raise Kolekti::CollectorError' do
+        it 'is expected to fill the supported metrics list' do
           instance = described_class.new
           expect(instance.supported_metrics).to eq(supported_metrics)
         end
