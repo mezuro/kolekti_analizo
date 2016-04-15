@@ -4,9 +4,12 @@ The Kolekti Analizo gem implements a collector for C, C++ and Java using Analizo
 
 == Unreleased
 
+== v0.0.5 - 15/04/2016
+
 Add proper cucumber integration
 Fix RSpec integration
 Add travis script
+Update kolekti
 
 == v0.0.4 - 23/03/2016
 
