@@ -8,15 +8,18 @@ require 'kolekti'
 describe Kolekti::Analizo::Collector do
   context 'without a simulated metrics list' do
     describe 'initialize' do
+      let(:readio){ mock('readio') }
+      let(:writeio){ mock('writeio') }
+
       context 'when analizo failed' do
         before :each do
-          described_class.any_instance.expects(:`).with('analizo metrics --list').returns("")
-          $?.expects(:success?).returns(false)
-          $?.expects(:exitstatus).returns(1)
+          writeio.expects(:close)
+          IO.expects(:pipe).returns([readio,writeio])
+          described_class.any_instance.expects(:system).with('analizo metrics --list', out: writeio).returns(nil)
         end
 
         it 'is expected to raise Kolekti::CollectorError with the correct exit status' do
-          expect { described_class.new }.to raise_error(Kolekti::CollectorError,  "Analizo failed with exit status: 1")
+          expect { described_class.new }.to raise_error(Kolekti::CollectorError,  "Analizo failed")
         end
       end
 
@@ -27,8 +30,10 @@ describe Kolekti::Analizo::Collector do
         let(:supported_metrics) { { acc_metric.code.to_sym => acc_metric, tac_metric.code.to_sym => tac_metric } }
 
         before :each do
-          described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
-          $?.expects(:success?).returns(true)
+          writeio.expects(:close)
+          readio.expects(:read).returns(metric_list)
+          IO.expects(:pipe).returns([readio,writeio])
+          described_class.any_instance.expects(:system).with('analizo metrics --list', out: writeio).returns(true)
         end
 
         it 'is expected to fill the supported metrics list' do
@@ -57,10 +62,14 @@ describe Kolekti::Analizo::Collector do
     end
 
     describe 'default_value_from' do
-      let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
+      let!(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
+      let!(:readio){ mock('readio') }
+      let!(:writeio){ mock('writeio') }
       before :each do
-        described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
-        $?.expects(:success?).returns(true)
+        writeio.expects(:close)
+        readio.expects(:read).returns(metric_list)
+        IO.expects(:pipe).returns([readio,writeio])
+        described_class.any_instance.expects(:system).with('analizo metrics --list', out: writeio).returns(true)
       end
 
       context 'with a valid metric configuration' do
@@ -81,21 +90,27 @@ describe Kolekti::Analizo::Collector do
     end
 
     describe 'collect_metrics' do
+      let!(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
+      let!(:readio){ mock('readio') }
+      let!(:writeio){ mock('writeio') }
+
       let(:code_directory) { '/tmp/test' }
       let(:wanted_metric_configurations) { mock }
       let(:persistence_strategy) { mock }
       let(:analizo_metric_collector_list) { FactoryGirl.build(:analizo_metric_collector_list).raw_result }
 
       before :each do
+        writeio.expects(:close)
+        readio.expects(:read).returns(metric_list)
+        IO.expects(:pipe).returns([readio,writeio])
+        described_class.any_instance.expects(:system).with('analizo metrics --list', out: writeio).returns(true)
+
         described_class.any_instance.expects(:`).with("analizo metrics #{code_directory}").returns(analizo_metric_collector_list)
       end
 
       context 'when running succeeded' do
-        let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
         before :each do
-          described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
           Kolekti::Analizo::Parser.any_instance.expects(:parse_all).with(analizo_metric_collector_list)
-          $?.expects(:success?).twice.returns(true)
         end
 
         it 'is expected to run succesfully' do
@@ -104,10 +119,8 @@ describe Kolekti::Analizo::Collector do
       end
 
       context 'when running failed' do
-        let(:metric_list) { FactoryGirl.build(:analizo_metric_collector_list).raw }
         before :each do
-          described_class.any_instance.expects(:`).with('analizo metrics --list').returns(metric_list)
-          $?.stubs(:success?).returns(true, false)
+          $?.stubs(:success?).returns(false)
           $?.expects(:exitstatus).returns(1)
         end
 

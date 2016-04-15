@@ -61,9 +61,17 @@ module Kolekti
       end
 
       def metric_list
-        list = `analizo metrics --list`
-        raise Kolekti::CollectorError.new("Analizo failed with exit status: #{$?.exitstatus}") unless $?.success?
-        list
+        readio, writeio = IO.pipe
+
+        success = system('analizo metrics --list', out: writeio)
+        writeio.close
+
+        if success
+          readio.read
+        else
+          raise Kolekti::CollectorError.new("Analizo failed")
+        end
+
       end
     end
   end
