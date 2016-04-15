@@ -2,6 +2,10 @@
 
 The Kolekti Analizo gem implements a collector for C, C++ and Java using Analizo with Kolekti
 
+== Unreleased
+
+Add travis script
+
 == v0.0.4 - 23/03/2016
 
 Use symbols instead of strings on supported_metrics code
