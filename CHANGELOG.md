@@ -7,26 +7,26 @@ Analizo with Kolekti
 
 ## v0.0.5 - 15/04/2016
 
-Add proper cucumber integration
-Fix RSpec integration
-Add travis script
-Update kolekti
+* Add proper cucumber integration
+* Fix RSpec integration
+* Add travis script
+* Update kolekti
 
 ## v0.0.4 - 23/03/2016
 
-Use symbols instead of strings on supported_metrics code
+* Use symbols instead of strings on supported_metrics code
 
 ## v0.0.2 / v0.0.3 - 01/03/2016
 
-Adapt kolekti_analizo to the new Kolekti API
+* Adapt kolekti_analizo to the new Kolekti API
 
 ## v0.0.1 - 19/02/2016
 
-Initial release
+* Initial release
 
-### 
+---
 
-Kolekti Analizo. Copyright (C) 2015  The Mezuro Team
+Kolekti Analizo. Copyright (C) 2015-2016 The Mezuro Team
 
 This program is free software: you can redistribute it and/or modify it under
 the terms of the GNU Affero General Public License as published by the Free
