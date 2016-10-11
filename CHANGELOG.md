@@ -5,6 +5,8 @@ Analizo with Kolekti
 
 ## Unreleased
 
+- Fix unknown metric default value fetching error type (Using UnavailableMetricError)
+
 ## v0.0.5 - 15/04/2016
 
 * Add proper cucumber integration

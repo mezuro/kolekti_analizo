@@ -83,8 +83,8 @@ describe Kolekti::Analizo::Collector do
       context 'with an invalid metric configuration' do
         let(:metric) { FactoryGirl.build(:native_metric) }
         let(:metric_configuration) { FactoryGirl.build(:metric_configuration, metric: metric) }
-        it 'is expected to raise an ArgumentError exception' do
-          expect { subject.default_value_from(metric_configuration) }.to raise_error(ArgumentError, "Metric configuration does not belong to Analizo")
+        it 'is expected to raise an UnavailableMetricError exception' do
+          expect { subject.default_value_from(metric_configuration) }.to raise_error(Kolekti::UnavailableMetricError, "Metric configuration does not belong to Analizo")
         end
       end
     end
